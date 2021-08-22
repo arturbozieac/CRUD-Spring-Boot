@@ -19,16 +19,4 @@ public interface StudentRepository extends JpaRepository<Student, Long>{
 	 */
 	@Query("SELECT s FROM Student s WHERE s.email = ?1")
 	Optional<Student> findStudentByEmail(String email);
-
-	
-	/**
-	 * Checks if a student with given id is present in the database. <br>
-	 * <br>
-	 * <code>SELECT * FROM STUDENT WHERE id = ?</code>
-	 * 
-	 * @param id Id to check.
-	 * @return <code>Null</code> if ID is not found.
-	 */
-	@Query("SELECT s FROM Student s WHERE s.id = ?1")
-	Optional<Student> findStudentById(Long id);
 }
