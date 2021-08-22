@@ -1,10 +1,10 @@
 package com.crud.spring.crudspringboot.student;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @Service
 public class StudentService {
@@ -16,8 +16,27 @@ public class StudentService {
 		this.studentRepository = studentRepository;
 	}
 	
-	@GetMapping
-	public List<Student> getStudents() {
+ 	public List<Student> getStudents() {
 		return studentRepository.findAll();
+	}
+
+	public void addNewStudent(Student student) {
+		Optional<Student> studentByEmail = studentRepository.findStudentByEmail(student.getEmail());
+		
+		if(studentByEmail.isPresent()) {
+			throw new IllegalStateException("Email taken.");
+		}
+		
+		studentRepository.save(student);
+	}
+
+	public void deleteStudent(Long id) {
+		Optional<Student> studentById = studentRepository.findStudentById(id);
+		
+		if(studentById.isPresent()) {
+			studentRepository.deleteById(id);
+		}else {
+			throw new IllegalStateException("Student with this ID does not exists.");
+		}
 	}
 }
