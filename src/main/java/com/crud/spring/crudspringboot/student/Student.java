@@ -1,11 +1,34 @@
 package com.crud.spring.crudspringboot.student;
 
 import java.time.LocalDate;
+import java.time.Period;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity
+@Table
 public class Student {
 	/**
 	 * Student identifier
 	 */
+	@Id
+	@SequenceGenerator(
+			name = "student_sequence",
+			sequenceName = "student_sequence",
+			allocationSize = 1
+			)
+	@GeneratedValue(
+			strategy = GenerationType.SEQUENCE,
+			generator = "student_sequence"
+			)
+	
+	
 	private long id;
 	/**
 	 * Student name
@@ -22,6 +45,7 @@ public class Student {
 	/**
 	 * Student age
 	 */
+	@Transient
 	private int age;
 
 	/**
@@ -37,15 +61,13 @@ public class Student {
 	 * @param name       Student name
 	 * @param email      Student email
 	 * @param dayOfBirth Student birthday
-	 * @param age        Student age
 	 */
-	public Student(long id, String name, String email, LocalDate dayOfBirth, int age) {
+	public Student(long id, String name, String email, LocalDate dayOfBirth) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.dayOfBirth = dayOfBirth;
-		this.age = age;
 	}
 
 	/**
@@ -54,14 +76,12 @@ public class Student {
 	 * @param name       Student name
 	 * @param email      Student email
 	 * @param dayOfBirth Student birthday
-	 * @param age        Student age
 	 */
-	public Student(String name, String email, LocalDate dayOfBirth, int age) {
+	public Student(String name, String email, LocalDate dayOfBirth) {
 		super();
 		this.name = name;
 		this.email = email;
 		this.dayOfBirth = dayOfBirth;
-		this.age = age;
 	}
 	
 	@Override
@@ -103,13 +123,13 @@ public class Student {
 	}
 
 	public int getAge() {
-		return age;
+		return Period.between(
+				this.dayOfBirth,
+				LocalDate.now())
+				.getYears();
 	}
 
 	public void setAge(int age) {
 		this.age = age;
 	}
-	
-	
-
 }
