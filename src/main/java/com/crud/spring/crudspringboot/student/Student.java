@@ -3,6 +3,7 @@ package com.crud.spring.crudspringboot.student;
 import java.time.LocalDate;
 import java.time.Period;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,13 +11,15 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 
-@Entity
-@Table
+@Entity(name = "Student")
+@Table(
+		name = "student",
+		uniqueConstraints = {
+				@UniqueConstraint(name = "student_email_unique", columnNames = "email")
+		})
 public class Student {
-	/**
-	 * Student identifier
-	 */
 	@Id
 	@SequenceGenerator(
 			name = "student_sequence",
@@ -27,20 +30,31 @@ public class Student {
 			strategy = GenerationType.SEQUENCE,
 			generator = "student_sequence"
 			)
-	
-	
+	/**
+	 * Student identifier
+	 */
+	@Column(
+			name = "id",
+			updatable = false,
+			nullable = false )
 	private Long id;
 	/**
 	 * Student name
 	 */
+	@Column(columnDefinition = "TEXT",
+			nullable = false)
 	private String name;
 	/**
 	 * Student email
 	 */
+	@Column(columnDefinition = "TEXT",
+			nullable = false)
 	private String email;
 	/**
 	 * Student birthday
 	 */
+	@Column(columnDefinition = "DATE",
+			nullable = false)
 	private LocalDate dayOfBirth;
 	/**
 	 * Student age
